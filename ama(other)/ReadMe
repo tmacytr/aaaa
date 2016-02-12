@@ -1,0 +1,46 @@
+For this problem, I choose a HashMap data structure.
+The key of this HashMap is the time-stamp, the value will be another small HashMap,
+Which means, if we get a time of k, we will get the HashMap of this time.
+The key of the small HashMap is the location id , the value will be an ArrayList of the contents that are to be selected from,
+which means if we get a specific location id, we will get an ArrayList of the content that will be selected at this location.
+
+HashMap<Time, HashMap<Location, ArrayList<Content>>> map
+
+Let’s start from the beginning. If we get the time of k, we will get a small HashMap here.
+We will use backtracking algorithm here to traverse from the first area to the last area to do the selection.
+We will also needs a HashMap which key is the content, and the value is Boolean, to mark if this content has been selected.
+Cause if this content has been selected, we can not select it another time.
+	
+HashMap<Content, Boolean> visited
+
+For example, from the a1 area, we will have  four choice here, to select c1, c2, c3 or select nothing, we first select c1,
+and mark c1 has been visited, and add the c1.value * weight[0] to the curRes, add c1 to the curItem,
+then go to the next level a2 area, at this area, we will have 3 choice, select c4, select c5, or nothing, we first check c4,
+because it has not been selected , we will select  c4, also add c4.value * weight[1] to curRes, and add c4 to curItem,
+and then go to the next level a3,  because c1 has been visited, so we will move to another choice, c5, and also do the same operation to curRes and CurItem,
+then a4 select c3, a5 select a2 then a6 because c1 has been visited, we will move to next choice, select nothing,
+then we check with the max, because curRes is greater than max, which means that the current selection plan is better,
+we will update the max and res. Then we do the back tracking, because a6 has no other choice here, we go to the upper level,
+and select another choice for a5, select nothing, then we move to a6, still c1 has been selected, we select nothing, currently,
+the curRes is not bigger than max, we will not update, we will also do backtracking, we back to a4… and so on until find the global max value. 
+
+The time complexity for this problem should be considered as two parts, the first part is to construct the big HashMap.
+Because we need to traverse the ArrayList of at most three contents, and then traverse the six area and then map to the whole time stamp,
+it should be m * n * k, where m is the number of max contents that can be selected  from, for this problem it is 3, n is the number of areas,
+for this problem it is 6, k is the length of the whole time stamp.
+
+Another part is to do the selection part. This is an NP problem. Because each time we have at most (m + 1)choice, where m is the number of
+contents that can be selected, 1 is to select nothing here. And we need to traverse n levels. So the time complexity is (m + 1) to the power of n,
+for this problem it should be 4 ^ 6 here
+So the total time complexity is (m + 1) to the power of n here.
+Because the time complexity is really big when m and n is really large.
+I can think up a way to do the optimization is using greedy algorithm. We will sort by the weight first to guarantee we will choose the
+big weight value first. Then we choose the biggest value content at this level, and then we move to next level and choose the biggest
+value content at next level.. and so on.
+The time complexity of this algorithm should be m * n
+But the disadvantage for the algorithm is that this result may not be a global max value, it is only a local max value. If we use the
+backtracking DFS algorithm before, we will get a global max value. So there would be a trade off between time complexity and result.
+
+What if input of previous problem invalid? Communication with them.
+Why greedy no good? 4^6 time complexity not big. When n is really big time complexity becomes really big, which may not happen in Amazon.
+Revenue VS click? 
